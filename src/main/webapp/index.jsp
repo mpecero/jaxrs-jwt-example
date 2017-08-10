@@ -7,6 +7,7 @@
 <title>Inicio</title>
 </head>
 <body>
-Hola Mundo
+<p>Ejemplo de llamada al servicio de autenticación: <a href="http://localhost:8080/DemoWeb/rest/usuario/login?user=test&password=test">http://localhost:8080/DemoWeb/rest/usuario/login?user=test&password=test</a></p>
+<p>Ejemplo de llamada a servicio REST securizado: <a href="http://localhost:8080/DemoWeb/rest/pelicula/1">http://localhost:8080/DemoWeb/rest/pelicula/1</a></p>
 </body>
 </html>

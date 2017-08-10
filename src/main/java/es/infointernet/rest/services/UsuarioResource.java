@@ -23,16 +23,16 @@ public class UsuarioResource {
  
     @GET
     @Path("/login")
-    public Response authenticateUser(@QueryParam("login") String login,
+    public Response authenticateUser(@QueryParam("user") String user,
     		@QueryParam("password") String password) {
         try {
  
             // Aquí iría el código de validación del usuario y contraseñas proporcionados,
         	// por ejemplo validándolo contra una base de datos...
-            //authenticate(login, password);
+            //authenticate(user, password);
         	
             // Si todo es correcto, generamos el token
-            String token = issueToken(login);
+            String token = issueToken(user);
  
             // Devolvemos el token en la cabecera "Authorization". 
             // Se podría devolver también en la respuesta directamente.
