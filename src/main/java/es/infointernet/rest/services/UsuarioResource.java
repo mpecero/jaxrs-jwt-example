@@ -5,7 +5,9 @@ import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.Date;
 
+import javax.naming.AuthenticationException;
 import javax.ws.rs.GET;
+import javax.ws.rs.NotAllowedException;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
@@ -27,12 +29,12 @@ public class UsuarioResource {
     		@QueryParam("password") String password) {
         try {
  
-            // Aquí iría el código de validación del usuario y contraseñas proporcionados,
+            // Aquí iría el código de validación del usuario y contraseñas,
         	// por ejemplo validándolo contra una base de datos...
-            //authenticate(user, password);
+            String roles = authenticate(user, password);
         	
             // Si todo es correcto, generamos el token
-            String token = issueToken(user);
+            String token = issueToken(user, roles);
  
             // Devolvemos el token en la cabecera "Authorization". 
             // Se podría devolver también en la respuesta directamente.
@@ -43,7 +45,7 @@ public class UsuarioResource {
         }
     }
  
-    private String issueToken(String login) {
+    private String issueToken(String login, String roles) {
     	//Calculamos la fecha de expiración del token
     	Date issueDate = new Date();
     	Calendar calendar = Calendar.getInstance();
@@ -53,7 +55,7 @@ public class UsuarioResource {
         
 		//Creamos el token
         String jwtToken = Jwts.builder()
-        		.claim("rol", "a,b,c")
+        		.claim("roles", roles)
                 .setSubject(login)
                 .setIssuer("http://www.infointernet.es")
                 .setIssuedAt(issueDate)
@@ -62,4 +64,19 @@ public class UsuarioResource {
                 .compact();
         return jwtToken;
     }
+    
+    private String authenticate(String user, String password) throws AuthenticationException{
+    	//Tenemos dos usuarios: 
+    	//test -> rol de usuario
+    	//admin -> rol de administrador
+    	if("test".equals(user) && "test".equals(password)) {
+    		return "USUARIO";
+    	} else if("admin".equals(user) && "admin".equals(password)) {
+    		return "ADMINISTRADOR";
+    	} else {
+    		throw new AuthenticationException();
+    	}
+    
+    }
+    
 }

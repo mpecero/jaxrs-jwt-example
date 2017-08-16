@@ -2,6 +2,7 @@ package es.infointernet.rest.filter;
 
 import java.io.IOException;
 import java.security.Key;
+import java.util.Arrays;
 
 import javax.annotation.Priority;
 import javax.crypto.KeyGenerator;
@@ -14,6 +15,10 @@ import javax.ws.rs.ext.Provider;
 import javax.ws.rs.Priorities;
 
 import es.infointernet.annotation.Secured;
+import es.infointernet.bean.User;
+import es.infointernet.security.MyApplicationSecurityContext;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.impl.crypto.MacProvider;
 
@@ -35,8 +40,20 @@ public class RestSecurityFilter implements ContainerRequestFilter {
             String token = authorizationHeader.substring("Bearer".length()).trim();
  
             // Valida el token utilizando la cadena secreta
-            Jwts.parser().setSigningKey(KEY).parseClaimsJws(token);
- 
+            Jws<Claims> claims = Jwts.parser().setSigningKey(KEY).parseClaimsJws(token);
+            
+            //Creamos el usuario a partir de la información del token
+            User usuario = new User();
+            usuario.setUsername(claims.getBody().getSubject());
+            String roles = (String) claims.getBody().get("roles"); 
+            usuario.setRoles(Arrays.asList(roles.split(",")));
+            
+            // Creamos el SecurityContext
+            MyApplicationSecurityContext secContext = new MyApplicationSecurityContext(usuario, requestContext.getSecurityContext().isSecure());
+            
+            //Seteamos el contexto de seguridad
+            requestContext.setSecurityContext(secContext);
+            
         } catch (Exception e) {
             requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED).build());
         }

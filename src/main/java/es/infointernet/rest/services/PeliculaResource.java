@@ -3,7 +3,9 @@ package es.infointernet.rest.services;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.GET;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -34,6 +36,15 @@ public class PeliculaResource {
 		
         // Habría que llamar a un servicio de búsqueda de películas
         return getPeliculaEjemplo(); 
+    }
+	
+	@PUT
+	@Secured
+	@RolesAllowed({"ADMINISTRADOR"})
+    public void addPelicula() throws Exception{
+		
+        // Habría que llamar a un servicio para crear películas
+ 
     }
 	
 	
