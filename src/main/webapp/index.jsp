@@ -7,7 +7,23 @@
 <title>Inicio</title>
 </head>
 <body>
-<p>Ejemplo de llamada al servicio de autenticación: <a href="http://localhost:8080/DemoWeb/rest/usuario/login?user=test&password=test">http://localhost:8080/DemoWeb/rest/usuario/login?user=test&password=test</a></p>
-<p>Ejemplo de llamada a servicio REST securizado: <a href="http://localhost:8080/DemoWeb/rest/pelicula/1">http://localhost:8080/DemoWeb/rest/pelicula/1</a></p>
+<h1>Ejemplo de servicios REST con JAX-RS protegidos con token JWT</h1>
+<h2>Cómo probar la aplicación</h2>
+Recomendamos el uso de alguna aplicación como la extensión Postman de Chrome (https://chrome.google.com/webstore/detail/postman/fhbjgbiflinjbdggehcddcbncdddomop)
+<ul>
+<li>
+URL para obtener el token JWT: <a href="http://localhost:8080/DemoWeb/rest/usuario/login?user=test&password=test">http://localhost:8080/DemoWeb/rest/usuario/login?user=test&password=test</a> <br/>
+Usuario normal: test / test<br/>
+Usuario con rol administrador: admin / admin<br/>
+El token viene de vuelta en la cabecera Authorization de la respuesta.
+</li>
+<li>
+Invocar la API (usuario normal): (GET) <a hrel="http://localhost:8080/DemoWeb/rest/pelicula/1">http://localhost:8080/DemoWeb/rest/pelicula/1</a>
+</li>
+<li>
+Invocar la API (usuario administrador): (PUT) http://localhost:8080/DemoWeb/rest/pelicula/
+</li>
+</ul>
+El token debe ir en la cabecera Authorization de la petición a la API.
 </body>
 </html>

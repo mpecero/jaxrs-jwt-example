@@ -1,5 +1,6 @@
 package es.infointernet.rest.services;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,7 +11,9 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.SecurityContext;
 
 import es.infointernet.annotation.Secured;
 import es.infointernet.model.Actor;
@@ -32,8 +35,20 @@ public class PeliculaResource {
 	@GET
     @Produces({MediaType.APPLICATION_JSON+";charset=utf-8"})
 	@Secured
-    public Pelicula findPeliculas(@QueryParam("titulo") String titulo, @QueryParam("nombreActor") String nombreActor) throws Exception{
+    public Pelicula findPeliculas(@Context SecurityContext secContext, @QueryParam("titulo") String titulo, @QueryParam("nombreActor") String nombreActor) throws Exception{
 		
+		//Podemos comprobar si el usuario tiene un rol determinado
+		if(secContext.isUserInRole("ADMINISTRADOR")) {
+            //Realizar alguna operación específica para el administrador
+        }
+
+		//Podemos recuperar el nombre del usuario
+		String nombre = null;
+        Principal p = secContext.getUserPrincipal();
+        if(p != null) {
+            nombre = p.getName();
+        }
+		        
         // Habría que llamar a un servicio de búsqueda de películas
         return getPeliculaEjemplo(); 
     }
@@ -43,7 +58,7 @@ public class PeliculaResource {
 	@RolesAllowed({"ADMINISTRADOR"})
     public void addPelicula() throws Exception{
 		
-        // Habría que llamar a un servicio para crear películas
+		// Habría que llamar a un servicio para crear películas
  
     }
 	
